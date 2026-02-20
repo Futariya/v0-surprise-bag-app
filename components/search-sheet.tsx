@@ -97,7 +97,7 @@ export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) 
         role="dialog"
         aria-modal="true"
         aria-label="Search stores"
-        className={`fixed inset-x-0 bottom-0 z-50 flex max-h-[92vh] flex-col rounded-t-2xl bg-card shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col rounded-t-2xl bg-card shadow-2xl transition-transform duration-300 ease-out sm:max-h-[90vh] ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -156,7 +156,7 @@ export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) 
         </div>
 
         {/* Scrollable results area */}
-        <div className="flex-1 overflow-y-auto px-5 pb-6 scrollbar-none">
+        <div className="flex-1 overflow-y-auto px-5 pb-10 scrollbar-none">
           {/* If no query: show suggestions */}
           {!hasQuery && category === "All" ? (
             <div className="flex flex-col gap-6 pt-2">
@@ -257,42 +257,50 @@ function SearchResultRow({
   return (
     <button
       onClick={() => onSelect(store)}
-      className="flex items-center gap-3 rounded-xl bg-secondary/50 p-3 text-left transition-colors hover:bg-secondary"
+      className="flex w-full items-start gap-3 rounded-xl bg-secondary/50 p-3 text-left transition-colors active:bg-secondary"
     >
+      {/* Thumbnail */}
       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg">
         <Image
           src={store.image}
           alt={store.name}
           fill
+          sizes="56px"
           className="object-cover"
         />
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <h4 className="truncate text-sm font-bold text-foreground">
-          {store.name}
-        </h4>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="flex items-center gap-0.5">
-            <MapPin className="h-3 w-3" />
-            {store.distance}
-          </span>
-          <span className="flex items-center gap-0.5">
-            <Star className="h-3 w-3 fill-primary text-primary" />
-            {store.rating}
-          </span>
-          <span className="flex items-center gap-0.5">
-            <Clock className="h-3 w-3" />
-            {store.pickupStart}
+
+      {/* Info - takes remaining space, truncates */}
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex items-start justify-between gap-2">
+          <h4 className="truncate text-sm font-bold text-foreground">
+            {store.name}
+          </h4>
+          <span className="shrink-0 rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-bold text-primary">
+            {`-${discount}%`}
           </span>
         </div>
-      </div>
-      <div className="flex shrink-0 flex-col items-end gap-0.5">
-        <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
-          {`-${discount}%`}
-        </span>
-        <span className="text-sm font-extrabold text-primary">
-          {`\u20B1${store.discountedPrice}`}
-        </span>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 overflow-hidden text-[11px] text-muted-foreground">
+            <span className="flex shrink-0 items-center gap-0.5">
+              <MapPin className="h-3 w-3 shrink-0" />
+              <span className="truncate">{store.distance}</span>
+            </span>
+            <span className="shrink-0 text-border">{'|'}</span>
+            <span className="flex shrink-0 items-center gap-0.5">
+              <Star className="h-3 w-3 shrink-0 fill-primary text-primary" />
+              {store.rating}
+            </span>
+            <span className="shrink-0 text-border">{'|'}</span>
+            <span className="flex shrink-0 items-center gap-0.5">
+              <Clock className="h-3 w-3 shrink-0" />
+              {store.pickupStart}
+            </span>
+          </div>
+          <span className="shrink-0 text-sm font-extrabold text-primary">
+            {`\u20B1${store.discountedPrice}`}
+          </span>
+        </div>
       </div>
     </button>
   )
