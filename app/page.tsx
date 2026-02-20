@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useRef } from "react"
 import { HomeHeader } from "@/components/home-header"
 import { StoreCard } from "@/components/store-card"
 import { BagDetail } from "@/components/bag-detail"
@@ -28,6 +28,7 @@ export default function Page() {
   const [activeCategory, setActiveCategory] = useState<Category>("All")
   const [orders, setOrders] = useState<Order[]>([])
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Compute total savings across completed + active orders
   const totalSaved = useMemo(() => {
@@ -120,7 +121,9 @@ export default function Page() {
       } else if (tab === "search") {
         setScreen("home")
         setSelectedStore(null)
-        // Focus search on next tick handled by the search input
+        setActiveTab("search")
+        setTimeout(() => searchInputRef.current?.focus(), 100)
+        return
       }
     },
     []
@@ -189,6 +192,7 @@ export default function Page() {
         <div className="flex items-center gap-3 rounded-xl bg-secondary px-4 py-3">
           <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

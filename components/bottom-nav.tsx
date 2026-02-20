@@ -15,7 +15,7 @@ export function BottomNav({
 }: BottomNavProps) {
   const tabs = [
     { id: "home", label: "Home", icon: Home },
-    { id: "search", label: "Explore", icon: Search },
+    { id: "search", label: "Search", icon: Search },
     { id: "orders", label: "Orders", icon: ShoppingBag },
     { id: "profile", label: "Profile", icon: User },
   ]
