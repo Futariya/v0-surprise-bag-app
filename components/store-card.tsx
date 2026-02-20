@@ -29,16 +29,30 @@ export function StoreCard({ store, onSelect, priority = false }: StoreCardProps)
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+        {/* Discount badge */}
         <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1">
           <ShoppingBag className="h-3 w-3 text-primary-foreground" />
           <span className="text-xs font-bold text-primary-foreground">
             {`-${discount}%`}
           </span>
         </div>
+        {/* Flavor badge */}
+        <div
+          className={`absolute bottom-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide backdrop-blur-sm ${
+            store.flavor === "Savory"
+              ? "bg-primary/80 text-primary-foreground"
+              : store.flavor === "Sweet"
+                ? "bg-pink-500/80 text-white"
+                : "bg-secondary/80 text-secondary-foreground"
+          }`}
+        >
+          {store.flavor}
+        </div>
+        {/* Scarcity badge - warm orange urgency */}
         {store.bagsLeft <= 2 && (
-          <div className="absolute top-3 right-3 rounded-full bg-destructive/90 px-2.5 py-1">
-            <span className="text-xs font-bold text-destructive-foreground">
-              {`${store.bagsLeft} left!`}
+          <div className="absolute top-3 right-3 rounded-full bg-primary/90 px-2.5 py-1">
+            <span className="text-xs font-bold text-primary-foreground">
+              {`Only ${store.bagsLeft} left!`}
             </span>
           </div>
         )}

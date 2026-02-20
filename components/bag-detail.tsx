@@ -117,19 +117,19 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
         </div>
 
         {/* Urgency countdown */}
-        <div className="flex items-center gap-3 rounded-xl border border-destructive/20 bg-destructive/10 p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/20">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
+        <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20">
+            <AlertTriangle className="h-5 w-5 text-primary" />
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-destructive">
+          <div className="flex min-w-0 flex-col">
+            <span className="text-sm font-bold text-primary">
               {`Only ${store.bagsLeft} bag${store.bagsLeft > 1 ? "s" : ""} left!`}
             </span>
             <span className="text-xs text-muted-foreground">
-              {`Pickup window closes in ${minutes}:${seconds.toString().padStart(2, "0")}`}
+              {`Closes in ${minutes}:${seconds.toString().padStart(2, "0")}`}
             </span>
           </div>
-          <div className="ml-auto font-mono text-xl font-extrabold text-destructive">
+          <div className="ml-auto shrink-0 font-mono text-xl font-extrabold text-primary">
             {`${minutes}:${seconds.toString().padStart(2, "0")}`}
           </div>
         </div>
@@ -142,6 +142,11 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
           <p className="text-sm leading-relaxed text-muted-foreground">
             {store.description}
           </p>
+          {store.category === "Rice Meals" && (
+            <p className="text-xs italic leading-relaxed text-primary/80">
+              Meal bags typically include a serving of rice, a protein (chicken, pork, or fish), and vegetables to meet your nutritional needs during long study sessions.
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
             {store.tags.map((tag) => (
               <span
@@ -151,6 +156,24 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
                 {tag}
               </span>
             ))}
+          </div>
+          {/* Flavor badge */}
+          <div className="flex items-center gap-2 pt-1">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-bold ${
+                store.flavor === "Savory"
+                  ? "bg-primary/15 text-primary"
+                  : store.flavor === "Sweet"
+                    ? "bg-pink-500/15 text-pink-400"
+                    : "bg-secondary text-secondary-foreground"
+              }`}
+            >
+              {store.flavor === "Savory"
+                ? "\u{1F525} Savory"
+                : store.flavor === "Sweet"
+                  ? "\u{1F370} Sweet"
+                  : "\u{1F37D}\uFE0F Mixed"}
+            </span>
           </div>
         </div>
 

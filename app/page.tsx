@@ -210,21 +210,34 @@ export default function Page() {
         </button>
       </div>
 
-      {/* Category filter chips - scrollable */}
+      {/* Category filter chips - scrollable with icons */}
       <div className="flex gap-2 overflow-x-auto px-5 pb-3 scrollbar-none">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-              activeCategory === cat
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+        {CATEGORIES.map((cat) => {
+          const icon =
+            cat === "All"
+              ? "\u2728"
+              : cat === "Rice Meals"
+                ? "\u{1F35A}"
+                : cat === "Pastries"
+                  ? "\u{1F950}"
+                  : cat === "Snacks"
+                    ? "\u{1F371}"
+                    : "\u2615"
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                activeCategory === cat
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              <span className="text-sm leading-none">{icon}</span>
+              {cat}
+            </button>
+          )
+        })}
       </div>
 
       {/* Section heading */}

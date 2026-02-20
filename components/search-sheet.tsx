@@ -11,8 +11,8 @@ interface SearchSheetProps {
   onSelectStore: (store: Store) => void
 }
 
-const RECENT_SEARCHES = ["Bread", "Empanada", "Pastry"]
-const TRENDING = ["Croissants", "Cinnamon Rolls", "Donuts"]
+const RECENT_SEARCHES = ["Rice Bowl", "Cold Brew", "Empanada"]
+const TRENDING = ["Bento Box", "Study Pack", "High Protein"]
 
 export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) {
   const [query, setQuery] = useState("")
@@ -140,19 +140,32 @@ export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) 
 
         {/* Category chips - horizontally scrollable */}
         <div className="flex shrink-0 gap-2 overflow-x-auto px-5 pb-3 scrollbar-none">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setCategory(cat)}
-              className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                category === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const icon =
+              cat === "All"
+                ? "\u2728"
+                : cat === "Rice Meals"
+                  ? "\u{1F35A}"
+                  : cat === "Pastries"
+                    ? "\u{1F950}"
+                    : cat === "Snacks"
+                      ? "\u{1F371}"
+                      : "\u2615"
+            return (
+              <button
+                key={cat}
+                onClick={() => setCategory(cat)}
+                className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                  category === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground"
+                }`}
+              >
+                <span className="text-sm leading-none">{icon}</span>
+                {cat}
+              </button>
+            )
+          })}
         </div>
 
         {/* Scrollable results area */}
@@ -273,9 +286,22 @@ function SearchResultRow({
       {/* Info - takes remaining space, truncates */}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex items-start justify-between gap-2">
-          <h4 className="truncate text-sm font-bold text-foreground">
-            {store.name}
-          </h4>
+          <div className="flex min-w-0 items-center gap-1.5">
+            <h4 className="truncate text-sm font-bold text-foreground">
+              {store.name}
+            </h4>
+            <span
+              className={`shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none ${
+                store.flavor === "Savory"
+                  ? "bg-primary/15 text-primary"
+                  : store.flavor === "Sweet"
+                    ? "bg-pink-500/15 text-pink-400"
+                    : "bg-secondary text-secondary-foreground"
+              }`}
+            >
+              {store.flavor}
+            </span>
+          </div>
           <span className="shrink-0 rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-bold text-primary">
             {`-${discount}%`}
           </span>
