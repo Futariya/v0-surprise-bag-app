@@ -92,11 +92,12 @@ export default function Page() {
 
       {/* Store cards */}
       <main className="flex flex-col gap-4 px-5">
-        {stores.map((store) => (
+        {stores.map((store, index) => (
           <StoreCard
             key={store.id}
             store={store}
             onSelect={handleSelectStore}
+            priority={index === 0}
           />
         ))}
       </main>

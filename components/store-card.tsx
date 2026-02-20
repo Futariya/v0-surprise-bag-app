@@ -7,9 +7,10 @@ import type { Store } from "@/lib/data"
 interface StoreCardProps {
   store: Store
   onSelect: (store: Store) => void
+  priority?: boolean
 }
 
-export function StoreCard({ store, onSelect }: StoreCardProps) {
+export function StoreCard({ store, onSelect, priority = false }: StoreCardProps) {
   const discount = Math.round(
     ((store.originalPrice - store.discountedPrice) / store.originalPrice) * 100
   )
@@ -24,6 +25,7 @@ export function StoreCard({ store, onSelect }: StoreCardProps) {
           src={store.image}
           alt={`Food from ${store.name}`}
           fill
+          priority={priority}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
