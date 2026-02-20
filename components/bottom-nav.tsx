@@ -25,7 +25,7 @@ export function BottomNav({
       <div className="flex items-center justify-around py-2 pb-[env(safe-area-inset-bottom)]">
         {tabs.map((tab) => {
           const Icon = tab.icon
-          const isActive = activeTab === tab.id
+          const isActive = tab.id !== "search" && activeTab === tab.id
           const showBadge = tab.id === "orders" && orderCount > 0
           return (
             <button

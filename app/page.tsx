@@ -8,6 +8,7 @@ import { PickupTicket } from "@/components/pickup-ticket"
 import { OrdersScreen } from "@/components/orders-screen"
 import { ProfileScreen } from "@/components/profile-screen"
 import { BottomNav } from "@/components/bottom-nav"
+import { SearchSheet } from "@/components/search-sheet"
 import {
   stores,
   CATEGORIES,
@@ -16,7 +17,6 @@ import {
   type Order,
   type Category,
 } from "@/lib/data"
-import { Search, X } from "lucide-react"
 
 type Screen = "home" | "detail" | "ticket" | "orders" | "profile"
 
@@ -24,13 +24,14 @@ export default function Page() {
   const [screen, setScreen] = useState<Screen>("home")
   const [selectedStore, setSelectedStore] = useState<Store | null>(null)
   const [activeTab, setActiveTab] = useState("home")
-  const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState<Category>("All")
   const [orders, setOrders] = useState<Order[]>([])
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
 
-  // Compute total savings across completed + active orders
+  // Swipe-up detection from anywhere on the feed
+  const swipeRef = useRef({ startY: 0, active: false })
+
   const totalSaved = useMemo(() => {
     return orders.reduce((sum, o) => {
       if (o.status !== "cancelled") {
@@ -40,44 +41,31 @@ export default function Page() {
     }, 0)
   }, [orders])
 
-  // Filter stores by search + category
   const filteredStores = useMemo(() => {
     return stores.filter((store) => {
-      const matchesCategory =
-        activeCategory === "All" || store.category === activeCategory
-      const matchesSearch =
-        searchQuery.trim() === "" ||
-        store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        store.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        store.tags.some((t) =>
-          t.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      return matchesCategory && matchesSearch
+      return activeCategory === "All" || store.category === activeCategory
     })
-  }, [searchQuery, activeCategory])
+  }, [activeCategory])
 
   const handleSelectStore = useCallback((store: Store) => {
     setSelectedStore(store)
     setScreen("detail")
   }, [])
 
-  const handleReserve = useCallback(
-    (store: Store, quantity: number) => {
-      const newOrder: Order = {
-        id: `order-${Date.now()}`,
-        store,
-        quantity,
-        totalPrice: store.discountedPrice * quantity,
-        pin: generatePin(),
-        status: "active",
-        reservedAt: Date.now(),
-      }
-      setOrders((prev) => [newOrder, ...prev])
-      setActiveOrder(newOrder)
-      setScreen("ticket")
-    },
-    []
-  )
+  const handleReserve = useCallback((store: Store, quantity: number) => {
+    const newOrder: Order = {
+      id: `order-${Date.now()}`,
+      store,
+      quantity,
+      totalPrice: store.discountedPrice * quantity,
+      pin: generatePin(),
+      status: "active",
+      reservedAt: Date.now(),
+    }
+    setOrders((prev) => [newOrder, ...prev])
+    setActiveOrder(newOrder)
+    setScreen("ticket")
+  }, [])
 
   const handleCompleteOrder = useCallback((orderId: string) => {
     setOrders((prev) =>
@@ -108,31 +96,42 @@ export default function Page() {
     }
   }, [screen])
 
-  const handleTabChange = useCallback(
-    (tab: string) => {
-      setActiveTab(tab)
-      if (tab === "home") {
-        setScreen("home")
-        setSelectedStore(null)
-      } else if (tab === "orders") {
-        setScreen("orders")
-      } else if (tab === "profile") {
-        setScreen("profile")
-      } else if (tab === "search") {
-        setScreen("home")
-        setSelectedStore(null)
-        setActiveTab("search")
-        setTimeout(() => searchInputRef.current?.focus(), 100)
-        return
-      }
-    },
-    []
-  )
+  const handleTabChange = useCallback((tab: string) => {
+    if (tab === "search") {
+      setSearchOpen(true)
+      return
+    }
+    setActiveTab(tab)
+    if (tab === "home") {
+      setScreen("home")
+      setSelectedStore(null)
+    } else if (tab === "orders") {
+      setScreen("orders")
+    } else if (tab === "profile") {
+      setScreen("profile")
+    }
+  }, [])
 
   const handleViewTicket = useCallback((order: Order) => {
     setActiveOrder(order)
     setSelectedStore(order.store)
     setScreen("ticket")
+  }, [])
+
+  // Swipe-up handler for the feed area to open search
+  const handleFeedTouchStart = useCallback((e: React.TouchEvent) => {
+    swipeRef.current.startY = e.touches[0].clientY
+    swipeRef.current.active = true
+  }, [])
+
+  const handleFeedTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!swipeRef.current.active) return
+    const delta = swipeRef.current.startY - e.changedTouches[0].clientY
+    swipeRef.current.active = false
+    // Swipe up at least 80px to trigger search
+    if (delta > 80) {
+      setSearchOpen(true)
+    }
   }, [])
 
   // Detail screen
@@ -187,43 +186,43 @@ export default function Page() {
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <HomeHeader totalSaved={totalSaved} />
 
-      {/* Search bar */}
+      {/* Tappable search bar that opens the search sheet */}
       <div className="px-5 py-3">
-        <div className="flex items-center gap-3 rounded-xl bg-secondary px-4 py-3">
-          <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <input
-            ref={searchInputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search bakeries, eateries..."
-            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="shrink-0"
-              aria-label="Clear search"
-            >
-              <X className="h-4 w-4 text-muted-foreground" />
-            </button>
-          )}
-        </div>
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="flex w-full items-center gap-3 rounded-xl bg-secondary px-4 py-3 text-left"
+          aria-label="Open search"
+        >
+          <svg
+            className="h-4 w-4 shrink-0 text-muted-foreground"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path strokeLinecap="round" d="m21 21-4.35-4.35" />
+          </svg>
+          <span className="flex-1 text-sm text-muted-foreground">
+            Search bakeries, eateries...
+          </span>
+        </button>
       </div>
 
-      {/* Quick filters */}
+      {/* Category filter chips - scrollable */}
       <div className="flex gap-2 overflow-x-auto px-5 pb-3 scrollbar-none">
-        {CATEGORIES.map((filter) => (
+        {CATEGORIES.map((cat) => (
           <button
-            key={filter}
-            onClick={() => setActiveCategory(filter)}
-            className={`shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-              activeCategory === filter
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+              activeCategory === cat
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
             }`}
           >
-            {filter}
+            {cat}
           </button>
         ))}
       </div>
@@ -242,13 +241,27 @@ export default function Page() {
         </span>
       </div>
 
-      {/* Store cards */}
-      <main className="flex flex-col gap-4 px-5">
+      {/* Store cards - swipe up to open search */}
+      <main
+        className="flex flex-col gap-4 px-5"
+        onTouchStart={handleFeedTouchStart}
+        onTouchEnd={handleFeedTouchEnd}
+      >
         {filteredStores.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-16">
-            <Search className="h-10 w-10 text-muted-foreground/50" />
+            <svg
+              className="h-10 w-10 text-muted-foreground/40"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path strokeLinecap="round" d="m21 21-4.35-4.35" />
+            </svg>
             <p className="text-sm text-muted-foreground">
-              No stores found. Try a different search or filter.
+              No stores in this category yet.
             </p>
           </div>
         ) : (
@@ -262,6 +275,13 @@ export default function Page() {
           ))
         )}
       </main>
+
+      {/* Search bottom sheet */}
+      <SearchSheet
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSelectStore={handleSelectStore}
+      />
 
       <BottomNav
         activeTab={activeTab}
