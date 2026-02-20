@@ -2,7 +2,11 @@
 
 import { MapPin, Bell, Coins } from "lucide-react"
 
-export function HomeHeader() {
+interface HomeHeaderProps {
+  totalSaved: number
+}
+
+export function HomeHeader({ totalSaved }: HomeHeaderProps) {
   return (
     <header className="flex items-center justify-between px-5 pt-4 pb-2">
       <div className="flex items-center gap-2">
@@ -20,7 +24,7 @@ export function HomeHeader() {
         <div className="flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5">
           <Coins className="h-3.5 w-3.5 text-primary" />
           <span className="text-xs font-bold text-primary">
-            {"Saved: \u20B1450"}
+            {`Saved: \u20B1${totalSaved.toLocaleString()}`}
           </span>
         </div>
         <button
