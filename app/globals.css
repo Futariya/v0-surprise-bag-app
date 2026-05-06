@@ -3,45 +3,45 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Dark mode default - surplus food marketplace for late-night students */
+/* Modern dark mode - premium food rescue app */
 :root {
-  --background: oklch(0.13 0.005 250);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.18 0.005 250);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.18 0.005 250);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.75 0.18 55);
-  --primary-foreground: oklch(0.13 0.005 250);
-  --secondary: oklch(0.22 0.005 250);
-  --secondary-foreground: oklch(0.9 0 0);
-  --muted: oklch(0.22 0.005 250);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.75 0.18 55);
-  --accent-foreground: oklch(0.13 0.005 250);
+  --background: oklch(0.121 0.004 250);
+  --foreground: oklch(0.96 0.005 0);
+  --card: oklch(0.18 0.004 250);
+  --card-foreground: oklch(0.96 0.005 0);
+  --popover: oklch(0.18 0.004 250);
+  --popover-foreground: oklch(0.96 0.005 0);
+  --primary: oklch(0.74 0.19 54);
+  --primary-foreground: oklch(0.121 0.004 250);
+  --secondary: oklch(0.245 0.004 250);
+  --secondary-foreground: oklch(0.88 0.005 0);
+  --muted: oklch(0.305 0.004 250);
+  --muted-foreground: oklch(0.65 0.005 0);
+  --accent: oklch(0.74 0.19 54);
+  --accent-foreground: oklch(0.121 0.004 250);
   --destructive: oklch(0.55 0.22 27);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.26 0.005 250);
-  --input: oklch(0.22 0.005 250);
-  --ring: oklch(0.75 0.18 55);
-  --chart-1: oklch(0.75 0.18 55);
+  --destructive-foreground: oklch(0.96 0.005 0);
+  --border: oklch(0.28 0.004 250);
+  --input: oklch(0.245 0.004 250);
+  --ring: oklch(0.74 0.19 54);
+  --chart-1: oklch(0.74 0.19 54);
   --chart-2: oklch(0.7 0.15 160);
   --chart-3: oklch(0.65 0.12 250);
   --chart-4: oklch(0.8 0.15 85);
   --chart-5: oklch(0.7 0.18 30);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.16 0.005 250);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.75 0.18 55);
-  --sidebar-primary-foreground: oklch(0.13 0.005 250);
-  --sidebar-accent: oklch(0.22 0.005 250);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.26 0.005 250);
-  --sidebar-ring: oklch(0.75 0.18 55);
+  --radius: 1rem;
+  --sidebar: oklch(0.16 0.004 250);
+  --sidebar-foreground: oklch(0.96 0.005 0);
+  --sidebar-primary: oklch(0.74 0.19 54);
+  --sidebar-primary-foreground: oklch(0.121 0.004 250);
+  --sidebar-accent: oklch(0.245 0.004 250);
+  --sidebar-accent-foreground: oklch(0.96 0.005 0);
+  --sidebar-border: oklch(0.28 0.004 250);
+  --sidebar-ring: oklch(0.74 0.19 54);
   --warning: oklch(0.85 0.18 85);
-  --warning-foreground: oklch(0.13 0.005 250);
+  --warning-foreground: oklch(0.121 0.004 250);
   --success: oklch(0.7 0.17 150);
-  --success-foreground: oklch(0.13 0.005 250);
+  --success-foreground: oklch(0.121 0.004 250);
 }
 
 @theme inline {
@@ -105,5 +105,28 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Modern shadow elevations */
+  .shadow-elevation-1 {
+    @apply shadow-[0_1px_2px_rgba(0,0,0,0.3),0_2px_4px_rgba(0,0,0,0.15)];
+  }
+
+  .shadow-elevation-2 {
+    @apply shadow-[0_3px_8px_rgba(0,0,0,0.35),0_6px_12px_rgba(0,0,0,0.2)];
+  }
+
+  .shadow-elevation-3 {
+    @apply shadow-[0_6px_16px_rgba(0,0,0,0.4),0_12px_24px_rgba(0,0,0,0.25)];
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-background/40 backdrop-blur-md border border-border/30;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-200 ease-out;
   }
 }

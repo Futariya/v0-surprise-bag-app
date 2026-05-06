@@ -97,7 +97,7 @@ export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) 
         role="dialog"
         aria-modal="true"
         aria-label="Search stores"
-        className={`fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col rounded-t-2xl bg-card shadow-2xl transition-transform duration-300 ease-out sm:max-h-[90vh] ${
+        className={`fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col rounded-t-3xl bg-card shadow-elevation-3 transition-transform duration-300 ease-out sm:max-h-[90vh] ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -112,8 +112,8 @@ export function SearchSheet({ open, onClose, onSelectStore }: SearchSheetProps) 
         </div>
 
         {/* Search input */}
-        <div className="shrink-0 px-5 pb-3">
-          <div className="flex items-center gap-3 rounded-xl bg-secondary px-4 py-3">
+        <div className="shrink-0 px-5 pb-4">
+          <div className="flex items-center gap-3 rounded-2xl bg-secondary/60 px-4 py-3.5 shadow-elevation-1">
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
             <input
               ref={inputRef}

@@ -117,7 +117,7 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
         </div>
 
         {/* Urgency countdown */}
-        <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4">
+        <div className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/10 p-5 shadow-elevation-1">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20">
             <AlertTriangle className="h-5 w-5 text-primary" />
           </div>
@@ -135,7 +135,7 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
         </div>
 
         {/* What to expect */}
-        <div className="flex flex-col gap-3 rounded-xl bg-card p-4">
+        <div className="flex flex-col gap-3 rounded-2xl bg-card p-5 shadow-elevation-1">
           <h2 className="text-base font-bold text-foreground">
             What to expect
           </h2>
@@ -178,7 +178,7 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
         </div>
 
         {/* Quantity selector */}
-        <div className="flex items-center justify-between rounded-xl bg-card p-4">
+        <div className="flex items-center justify-between rounded-2xl bg-card p-5 shadow-elevation-1">
           <div className="flex flex-col gap-0.5">
             <span className="text-sm font-bold text-foreground">
               How many bags?
@@ -211,7 +211,7 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
         </div>
 
         {/* Pricing breakdown */}
-        <div className="flex flex-col gap-3 rounded-xl bg-card p-4">
+        <div className="flex flex-col gap-3 rounded-2xl bg-card p-5 shadow-elevation-1">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
               {`Surprise Bag x${quantity}`}
@@ -236,7 +236,7 @@ export function BagDetail({ store, onBack, onReserve }: BagDetailProps) {
       </div>
 
       {/* Floating CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-border bg-background/95 px-5 py-4 backdrop-blur-lg">
+      <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-border/40 bg-background/80 px-5 py-4 backdrop-blur-xl shadow-elevation-3">
         {confirming ? (
           <div className="flex flex-col gap-3">
             <p className="text-center text-sm text-muted-foreground">
