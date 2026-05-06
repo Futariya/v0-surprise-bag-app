@@ -29,8 +29,8 @@ export default function Page() {
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
   const [searchOpen, setSearchOpen] = useState(false)
 
-  // Swipe-up detection from anywhere on the feed
-  const swipeRef = useRef({ startY: 0, active: false })
+  // Swipe-up detection - only trigger from near bottom of screen
+  const swipeRef = useRef({ startY: 0, startTime: 0, active: false })
 
   const totalSaved = useMemo(() => {
     return orders.reduce((sum, o) => {
@@ -119,17 +119,28 @@ export default function Page() {
   }, [])
 
   // Swipe-up handler for the feed area to open search
+  // Only trigger if swiping from near the bottom (last 100px of screen)
   const handleFeedTouchStart = useCallback((e: React.TouchEvent) => {
-    swipeRef.current.startY = e.touches[0].clientY
-    swipeRef.current.active = true
+    const touchY = e.touches[0].clientY
+    const bottomThreshold = window.innerHeight - 100
+    if (touchY > bottomThreshold) {
+      swipeRef.current.startY = touchY
+      swipeRef.current.startTime = Date.now()
+      swipeRef.current.active = true
+    }
   }, [])
 
   const handleFeedTouchEnd = useCallback((e: React.TouchEvent) => {
     if (!swipeRef.current.active) return
-    const delta = swipeRef.current.startY - e.changedTouches[0].clientY
     swipeRef.current.active = false
-    // Swipe up at least 80px to trigger search
-    if (delta > 80) {
+    const endY = e.changedTouches[0].clientY
+    const delta = swipeRef.current.startY - endY // positive = upward
+    const timeDelta = Date.now() - swipeRef.current.startTime
+    const velocity = Math.abs(delta) / timeDelta // pixels per millisecond
+    
+    // Trigger search only for deliberate upward swipes (high velocity + distance)
+    // Requires: 60px minimum distance OR fast swipe (>0.3 px/ms)
+    if (delta > 60 && velocity > 0.15) {
       setSearchOpen(true)
     }
   }, [])
