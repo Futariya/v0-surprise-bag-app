@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useRef } from "react"
+import { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import { HomeHeader } from "@/components/home-header"
 import { StoreCard } from "@/components/store-card"
 import { BagDetail } from "@/components/bag-detail"
@@ -9,6 +9,7 @@ import { OrdersScreen } from "@/components/orders-screen"
 import { ProfileScreen } from "@/components/profile-screen"
 import { BottomNav } from "@/components/bottom-nav"
 import { SearchSheet } from "@/components/search-sheet"
+import { Tutorial } from "@/components/tutorial"
 import {
   stores,
   CATEGORIES,
@@ -28,6 +29,27 @@ export default function Page() {
   const [orders, setOrders] = useState<Order[]>([])
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [showTutorial, setShowTutorial] = useState(false)
+  const [tutorialCompleted, setTutorialCompleted] = useState(false)
+
+  // Check if tutorial has been completed on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const completed = localStorage.getItem('saveplate-tutorial-completed') === 'true'
+      setTutorialCompleted(completed)
+      if (!completed) {
+        setShowTutorial(true)
+      }
+    }
+  }, [])
+
+  const handleTutorialComplete = useCallback(() => {
+    setShowTutorial(false)
+    setTutorialCompleted(true)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('saveplate-tutorial-completed', 'true')
+    }
+  }, [])
 
   // Swipe-up detection - only trigger from near bottom of screen
   const swipeRef = useRef({ startY: 0, startTime: 0, active: false })
@@ -190,6 +212,11 @@ export default function Page() {
         activeTab={activeTab}
       />
     )
+  }
+
+  // Show tutorial overlay if needed
+  if (showTutorial) {
+    return <Tutorial onComplete={handleTutorialComplete} />
   }
 
   // Home / Discovery Feed
