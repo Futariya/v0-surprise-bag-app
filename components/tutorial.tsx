@@ -29,7 +29,7 @@ const TUTORIAL_SLIDES: TutorialSlide[] = [
     title: 'Browse & Discover',
     subtitle: 'Find Amazing Deals',
     description:
-      'Scroll through nearby surprise bags, filter by category (Rice Meals, Pastries, Snacks, Coffee), and discover what's available right now.',
+      "Scroll through nearby surprise bags, filter by category (Rice Meals, Pastries, Snacks, Coffee), and discover what's available right now.",
     icon: (
       <div className="text-6xl">
         🔍
@@ -53,7 +53,7 @@ const TUTORIAL_SLIDES: TutorialSlide[] = [
     title: 'Pick Up Your Order',
     subtitle: 'Time-Sensitive Deals',
     description:
-      'Go to the location within the pickup window shown on your ticket. The countdown timer shows how much time is left—don\'t miss out!',
+      "Go to the location within the pickup window shown on your ticket. The countdown timer shows how much time is left—don't miss out!",
     icon: (
       <div className="text-6xl">
         ⏰
