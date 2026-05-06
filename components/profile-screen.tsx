@@ -12,6 +12,7 @@ import {
   LogOut,
 } from "lucide-react"
 import { BottomNav } from "@/components/bottom-nav"
+import { SaveplateLogo } from "./saveplate-logo"
 
 interface ProfileScreenProps {
   totalSaved: number
@@ -38,8 +39,10 @@ export function ProfileScreen({
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
-      <header className="px-5 pt-4 pb-2">
+      <header className="flex items-center justify-between px-5 pt-4 pb-3">
+        <SaveplateLogo size="md" showText={false} />
         <h1 className="text-2xl font-extrabold text-foreground">Profile</h1>
+        <div className="w-10" /> {/* Spacer for alignment */}
       </header>
 
       <div className="flex flex-col gap-5 px-5 py-4">

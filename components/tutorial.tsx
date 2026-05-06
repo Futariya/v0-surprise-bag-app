@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronRight, X } from 'lucide-react'
+import { SaveplateLogo } from './saveplate-logo'
 
 interface TutorialSlide {
   id: number
@@ -19,8 +20,8 @@ const TUTORIAL_SLIDES: TutorialSlide[] = [
     description:
       'Grab discounted Surprise Bags from local bakeries and eateries before closing time. Save up to 70% on your favorite foods.',
     icon: (
-      <div className="text-6xl">
-        🍽️
+      <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10">
+        <SaveplateLogo size="lg" showText={false} />
       </div>
     ),
   },
